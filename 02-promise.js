@@ -7,19 +7,23 @@ var almightyinterpreter = require('./lib/almightyinterpreter');
 var imageprocessor = require('./lib/imageprocessor');
 
 exports.main = function() {
+    return this.main_go(metadata, validator, metadatastore, almightyinterpreter, imageprocessor);
+}
+
+exports.main_go = function(metadata, validator, metadatastore, almightyinterpreter, imageprocessor) {
     
-    // extract metadata
     var img = { 's3Bucket': 'a', 's3Key': '' };
-    
-    metadata.extract(img).then((filemeta) => {
+
+    // extract metadata    
+    return metadata.extract(img).then((filemeta) => {
 
         if (!validator.isSupported(filemeta))
-            throw "Not supported image type";
+            return Promise.reject("Not supported image type");
             
-        metadatastore.transform(filemeta).then((imagemetadata) => {
+        return metadatastore.transform(filemeta).then((imagemetadata) => {
 
             // image recognition
-            almightyinterpreter.recognizePicture(filemeta).then((labels) => {
+            return almightyinterpreter.recognizePicture(filemeta).then((labels) => {
                 
                 // console.log("IMG " + JSON.stringify(img));
                 // console.log("META " + JSON.stringify(filemeta));
