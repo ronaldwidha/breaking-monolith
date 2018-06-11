@@ -23,16 +23,17 @@ exports.main_go = function(metadata, validator, metadatastore, almightyinterpret
         return metadatastore.transform(filemeta).then((imagemetadata) => {
 
             // image recognition
-            return almightyinterpreter.recognizePicture(filemeta).then((labels) => {
+            return almightyinterpreter.recognizePicture(img).then((labels) => {
                 
                 // console.log("IMG " + JSON.stringify(img));
                 // console.log("META " + JSON.stringify(filemeta));
                 // console.log("LABELS " + JSON.stringify(labels));
-
-                metadatastore.store([imagemetadata, labels]);
                 
-                // generate thumbnail
-                imageprocessor.generateThumbnail(img);
+                return Promise.all([
+                        metadatastore.store([imagemetadata, labels]),
+                        imageprocessor.generateThumbnail(img) // generate thumbnail
+                    ]);
+                
             });
         });
     });
