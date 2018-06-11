@@ -8,7 +8,7 @@ var imageprocessor = require('./lib/imageprocessor');
 
 exports.main = function() {
     // extract metadata
-    var img = { 's3Bucket': '', 's3Key': '' };
+    var img = loadImage();
     
     var filemeta = metadata.extract(img);
     validator.isSupported(filemeta);

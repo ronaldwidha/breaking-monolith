@@ -16,7 +16,7 @@ describe('Monolith - Promise Version', function() {
   
   describe('when everything all ok', function () {
     it('exits gracefully', function(done) {
-      sut.main().then(() => done());
+      sut.main().should.be.fulfilled.and.notify(done);
     });
   });
   
