@@ -32,7 +32,7 @@ exports.main_go = function(srcBucket, srcKey, metadata, validator, metadatastore
                 // console.log("LABELS " + JSON.stringify(labels));
                 
                 return Promise.all([
-                        metadatastore.store([imagemetadata, labels]),
+                        metadatastore.store(img, [imagemetadata, labels]),
                         imageprocessor.generateThumbnail(img) // generate thumbnail
                     ]);
                 
