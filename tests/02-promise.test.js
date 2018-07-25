@@ -8,27 +8,28 @@ chai.should();
 var sut = require('../02-promise.js');
 
 describe('Monolith - Promise Version', function() {
-  var metadata = require('../lib/metadata');
-  var validator = require('../lib/validator');
-  var metadatastore = require('../lib/metadatastore');
-  var almightyinterpreter = require('../lib/almightyinterpreter');
-  var imageprocessor = require('../lib/imageprocessor');
   
+  var metadata = {}; metadata.extract = (img) => Promise.resolve({});
+  const metadatastore = {
+    transform: (filemeta) => Promise.resolve({}),
+    store: (labels) => Promise.resolve({})
+  }
+  var almightyinterpreter = {}; almightyinterpreter.recognizePicture = (img) => Promise.resolve({});
+  var imageprocessor = {}; imageprocessor.generateThumbnail = (img) => Promise.resolve({});
+    
   describe('when everything all ok', function () {
+    var validator = { isSupported: (filemeta) => true }
     it('exits gracefully', function(done) {
-      sut.main().should.be.fulfilled.and.notify(done);
+      sut.main_go('foo', 'bar', metadata, validator, metadatastore, almightyinterpreter, imageprocessor)
+        .should.be.fulfilled.and.notify(done);
     });
   });
   
   describe('when image type is not supported', function () {
-    
-    var validator_false = new Object();
-    validator_false.isSupported = function(foo) { return false; }
-    
+    var validator = { isSupported: (filemeta) => false }
     it('throws an exception', function(done) {
-      sut.main_go(metadata, validator_false, metadatastore, almightyinterpreter, imageprocessor)
+      sut.main_go('foo', 'bar', metadata, validator, metadatastore, almightyinterpreter, imageprocessor)
         .should.be.rejected.and.notify(done);
-    })
+    });
   });
-
 });

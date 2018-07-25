@@ -10,18 +10,20 @@ exports.main = function() {
     return this.main_go(metadata, validator, metadatastore, almightyinterpreter, imageprocessor);
 }
 
-exports.main_go = function(metadata, validator, metadatastore, almightyinterpreter, imageprocessor) {
+exports.main_go = function(srcBucket, srcKey, metadata, validator, metadatastore, almightyinterpreter, imageprocessor) {
     
-    var img = { 's3Bucket': 'a', 's3Key': '' };
+    var img = { 'srcBucket': srcBucket, 'srcKey': srcKey };
 
     // extract metadata    
     return metadata.extract(img).then((filemeta) => {
-
+        // console.log('meta:' + JSON.stringify(filemeta))
+        
         if (!validator.isSupported(filemeta))
             return Promise.reject("Not supported image type");
-            
+        
         return metadatastore.transform(filemeta).then((imagemetadata) => {
-
+            // console.log(imagemetadata);
+            
             // image recognition
             return almightyinterpreter.recognizePicture(img).then((labels) => {
                 
