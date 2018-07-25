@@ -16,7 +16,7 @@ describe('Monolith - Promise Version Integration Testing', function() {
   //   });
   // });
   
-  describe.only('when image type is supported', function () {
+  describe('when image type is supported', function () {
     var metadata = require('../lib/metadata');
     var validator = require('../lib/validator');
     var metadatastore = require('../lib/metadatastore');
